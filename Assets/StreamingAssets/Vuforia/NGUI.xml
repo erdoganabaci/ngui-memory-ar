@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <QCARConfig>
   <Tracking>
+    <ImageTarget name="cat_qr2" size="0.100000 0.089267" />
+    <ImageTarget name="cat_qr1" size="0.100000 0.082687" />
+    <ImageTarget name="tiger_qr2" size="0.100000 0.089267" />
+    <ImageTarget name="tiger_qr1" size="0.100000 0.087661" />
     <ImageTarget name="bear_qr2" size="0.100000 0.089378" />
     <ImageTarget name="bear_qr1" size="0.100000 0.086598" />
   </Tracking>
