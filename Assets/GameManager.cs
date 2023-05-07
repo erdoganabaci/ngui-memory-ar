@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     public VideoClip bear_qr1_video;
     public VideoClip bear_qr2_video;
     public TextMeshProUGUI scoreText;
-
+    public RawImage videoDisplay;
 
     private string lastDetectedQRCode = null;
     private int score = 0;
@@ -42,12 +42,14 @@ public class GameManager : MonoBehaviour
         scoreText = scoreTextObject.GetComponent<TextMeshProUGUI>();
     }
 }
-
+private void AssignVideoTexture(VideoPlayer vp)
+{
+    videoDisplay.texture = vp.texture;
+}
 
     private void Start()
     {
-        // scoreText.text = "Score: " + score.ToString();
-        // scoreText.text = "10";
+         videoDisplay.enabled = false; // Hide video player
      if (scoreText != null)
        {
         //    scoreText.text = "10";
@@ -95,6 +97,9 @@ public class GameManager : MonoBehaviour
 
     public void OnQRCodeDetected(string qrCodeName)
     {
+            // if the video is playing, stop it
+            videoPlayer.Stop();
+
         if (lastDetectedQRCode == null || lastDetectedQRCode == qrCodeName)
         {
             lastDetectedQRCode = qrCodeName;
@@ -117,9 +122,20 @@ public class GameManager : MonoBehaviour
                 successAudioSource.Play();
                 Debug.Log("Success sound played");
             }
+            // Add if else statement to play different videos
+            // Play the matching video
+            videoPlayer.clip = bear_qr1_video;
+            videoPlayer.Prepare();
+
+            // Set up the callback for when the video is prepared
+            videoPlayer.prepareCompleted += AssignVideoTexture;
+            videoPlayer.Play();
+
+             videoDisplay.enabled = true;  // Show video player
         }
         else
         {
+             videoDisplay.enabled = false;  // Hide video player
             if (failAudioSource != null)
             {
                 failAudioSource.Play();
