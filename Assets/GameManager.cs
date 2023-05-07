@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 using UnityEngine.Video;
+using UnityEngine.UI;
+using TMPro;
 
 
 public class GameManager : MonoBehaviour
@@ -11,6 +13,7 @@ public class GameManager : MonoBehaviour
     public UnityEngine.Video.VideoPlayer videoPlayer;
     public VideoClip bear_qr1_video;
     public VideoClip bear_qr2_video;
+    public TextMeshProUGUI scoreText;
 
 
     private string lastDetectedQRCode = null;
@@ -30,8 +33,32 @@ public class GameManager : MonoBehaviour
         { "bear_qr2", null },
         // Add more mappings here
     };
+
+    private void Awake()
+{
+    GameObject scoreTextObject = GameObject.Find("Text (TMP)");
+    if (scoreTextObject != null)
+    {
+        scoreText = scoreTextObject.GetComponent<TextMeshProUGUI>();
+    }
+}
+
+
     private void Start()
     {
+        // scoreText.text = "Score: " + score.ToString();
+        // scoreText.text = "10";
+     if (scoreText != null)
+       {
+        //    scoreText.text = "10";
+        scoreText.text = "Score: " + score.ToString();
+
+       }
+       else
+       {
+           Debug.LogError("ScoreText not found or assigned.");
+       }
+    
          // Find the "Video Plane" object
         Transform videoPlaneTransform = transform.Find("Video Plane");
 
@@ -68,15 +95,21 @@ public class GameManager : MonoBehaviour
 
     public void OnQRCodeDetected(string qrCodeName)
     {
-        if (lastDetectedQRCode == null)
+        if (lastDetectedQRCode == null || lastDetectedQRCode == qrCodeName)
         {
             lastDetectedQRCode = qrCodeName;
             return;
         }
+        Debug.Log("OnQRCodeDetected lastDetectedQRCode: " + lastDetectedQRCode);
+        Debug.Log("OnQRCodeDetected qrCodeName: " + qrCodeName);
+        Debug.Log("OnQRCodeDetected is match: " + IsMatchingQRCode(lastDetectedQRCode, qrCodeName));
 
+        
         if (IsMatchingQRCode(lastDetectedQRCode, qrCodeName))
         {
             score++;
+            scoreText.text = "Score: " + score.ToString();
+
             Debug.Log("Score: " + score);
 
             if (successAudioSource != null)
