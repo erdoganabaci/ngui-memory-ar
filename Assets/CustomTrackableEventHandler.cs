@@ -33,7 +33,7 @@ public class CustomTrackableEventHandler : DefaultObserverEventHandler
                       Debug.Log(" before OnQRCodeDetected");
                       Debug.Log(" before OnQRCodeDetected qr name"+ mObserverBehaviour.TargetName);
 
-            gameManager.OnQRCodeDetected(mObserverBehaviour.TargetName);
+            gameManager.OnQRCodeDetected(mObserverBehaviour.TargetName,mObserverBehaviour);
         }
     }
 }

@@ -4,6 +4,7 @@ using System;
 using UnityEngine.Video;
 using UnityEngine.UI;
 using TMPro;
+using Vuforia;
 
 
 // [System.Serializable]
@@ -29,6 +30,8 @@ public class QRCodeSoundMapping
 
 public class GameManager : MonoBehaviour
 {
+    private HashSet<string> scannedQRCodes = new HashSet<string>();
+
     public AudioSource successAudioSource;
     public AudioSource failAudioSource;
     public UnityEngine.Video.VideoPlayer videoPlayer;
@@ -39,12 +42,14 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     public List<QRCodeSoundMapping> qrCodeSoundMappings = new List<QRCodeSoundMapping>();
 
+
     // public List<QRCodeSoundMapping> qrCodeSoundMappings;
     // public List<QRCodeSoundMapping> qrCodeSoundMappings = new List<QRCodeSoundMapping>();
     
     private string lastDetectedQRCode = null;
     private int score = 0;
 
+  
     private void Awake()
     {
         GameObject scoreTextObject = GameObject.Find("Text (TMP)");
@@ -107,8 +112,25 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void OnQRCodeDetected(string qrCodeName)
+    public void OnQRCodeDetected(string qrCodeName,ObserverBehaviour observerBehaviour)
     {
+               // Check if this QR code has already been scanned
+            if (scannedQRCodes.Contains(qrCodeName))
+            {
+                observerBehaviour.enabled = false;
+                 // Disable the augmentation
+                foreach(Transform child in observerBehaviour.transform)
+                {
+                    child.gameObject.SetActive(false);
+                }
+                // If it has, just ignore it and return
+                return;
+            }
+
+            // If it hasn't, add it to the set of scanned QR codes
+            scannedQRCodes.Add(qrCodeName);
+
+
             string qrCodeType = qrCodeName.Split('_')[0];
             // if the video is playing, stop it
             videoPlayer.Stop();
@@ -202,6 +224,18 @@ public class GameManager : MonoBehaviour
     {
         return qrCode1.Split('_')[0] == qrCode2.Split('_')[0];
     }
+
+      public void OnCloseButtonClick()
+    {
+        Debug.Log("Close button has been clicked");
+    }
+
+      public void OnRefreshButtonClick()
+    {
+        Debug.Log("Refresh button has been clicked");
+    }
+
+
 
 
 
