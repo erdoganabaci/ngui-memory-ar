@@ -219,6 +219,22 @@ public class GameManager : MonoBehaviour
                 failAudioSource.Play();
                 Debug.Log("Fail sound played");
             }
+            // Get the ObserverBehaviours for the QR codes that do not match
+            ObserverBehaviour lastDetectedQRCodeObserverBehaviour = scannedQRCodes[lastDetectedQRCode];
+            ObserverBehaviour qrCodeNameObserverBehaviour = scannedQRCodes[qrCodeName];
+        
+            // Enable the ObserverBehaviour and its children for the QR codes that do not match
+            lastDetectedQRCodeObserverBehaviour.enabled = true;
+            foreach (Transform child in lastDetectedQRCodeObserverBehaviour.transform)
+            {
+                child.gameObject.SetActive(true);
+            }
+        
+            qrCodeNameObserverBehaviour.enabled = true;
+            foreach (Transform child in qrCodeNameObserverBehaviour.transform)
+            {
+                child.gameObject.SetActive(true);
+            }
              // Remove the QR codes that do not match
             scannedQRCodes.Remove(lastDetectedQRCode);
             scannedQRCodes.Remove(qrCodeName);
