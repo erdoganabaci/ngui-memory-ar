@@ -30,10 +30,11 @@ public class QRCodeSoundMapping
 
 public class GameManager : MonoBehaviour
 {
-    private HashSet<string> scannedQRCodes = new HashSet<string>();
+    private Dictionary<string, ObserverBehaviour> scannedQRCodes = new Dictionary<string, ObserverBehaviour>(); 
 
     public AudioSource successAudioSource;
     public AudioSource failAudioSource;
+    public AudioSource randomAudioSource;
     public UnityEngine.Video.VideoPlayer videoPlayer;
     public VideoClip bear_qr1_video;
     public VideoClip bear_qr2_video;
@@ -110,15 +111,20 @@ public class GameManager : MonoBehaviour
         {
             failAudioSource = failAudioSourceObject.GetComponent<AudioSource>();
         }
+        GameObject randomAudioSourceObject = GameObject.Find("Random Audio Source");
+        if (randomAudioSourceObject != null)
+        {
+            randomAudioSource = randomAudioSourceObject.GetComponent<AudioSource>();
+        }
     }
 
     public void OnQRCodeDetected(string qrCodeName,ObserverBehaviour observerBehaviour)
     {
-               // Check if this QR code has already been scanned
-            if (scannedQRCodes.Contains(qrCodeName))
+            // Check if this QR code has already been scanned
+            if (scannedQRCodes.ContainsKey(qrCodeName))
             {
                 observerBehaviour.enabled = false;
-                 // Disable the augmentation
+                // Disable the augmentation
                 foreach(Transform child in observerBehaviour.transform)
                 {
                     child.gameObject.SetActive(false);
@@ -126,10 +132,8 @@ public class GameManager : MonoBehaviour
                 // If it has, just ignore it and return
                 return;
             }
-
-            // If it hasn't, add it to the set of scanned QR codes
-            scannedQRCodes.Add(qrCodeName);
-
+            // If this QR code is new, remember it and the corresponding ObserverBehaviour object
+            scannedQRCodes[qrCodeName] = observerBehaviour;
 
             string qrCodeType = qrCodeName.Split('_')[0];
             // if the video is playing, stop it
@@ -142,13 +146,15 @@ public class GameManager : MonoBehaviour
 
             if (soundMapping != null)
             {
-                if (!successAudioSource.isPlaying) // Add this if statement
+                if (!randomAudioSource.isPlaying) // Add this if statement
                 {
                     // Play a random success sound
                     int randomIndex = UnityEngine.Random.Range(0, soundMapping.successSounds.Count);
                     AudioClip randomSound = soundMapping.successSounds[randomIndex];
-                    successAudioSource.clip = randomSound;
-                    successAudioSource.Play();
+                    randomAudioSource.clip = randomSound;
+                    randomAudioSource.Play();
+                    // successAudioSource.clip = randomSound;
+                    // successAudioSource.Play();
                 }
             }
             else
@@ -213,6 +219,9 @@ public class GameManager : MonoBehaviour
                 failAudioSource.Play();
                 Debug.Log("Fail sound played");
             }
+             // Remove the QR codes that do not match
+            scannedQRCodes.Remove(lastDetectedQRCode);
+            scannedQRCodes.Remove(qrCodeName);
         }
 
         lastDetectedQRCode = null;
@@ -225,18 +234,60 @@ public class GameManager : MonoBehaviour
         return qrCode1.Split('_')[0] == qrCode2.Split('_')[0];
     }
 
-      public void OnCloseButtonClick()
+    //   public void OnCloseButtonClick()
+    // {
+    //     // Stop the video
+    //     videoPlayer.Stop();
+
+    //     // Hide the video display
+    //     videoDisplay.enabled = false;
+    //     Debug.Log("Close button has been clicked");
+    // }
+
+    public void OnCloseButtonClick()
+        {
+            // if(scannedQRCodes.ContainsKey(qrCodeName))
+            // {
+            //     // Disable the ObserverBehaviour
+            //     scannedQRCodes[qrCodeName].enabled = false;
+
+            //     // Disable all child GameObjects
+            //     foreach(Transform child in scannedQRCodes[qrCodeName].transform)
+            //     {
+            //         child.gameObject.SetActive(false);
+            //     }
+
+              
+            // }
+              // Stop the video player if it's playing
+                if (videoPlayer.isPlaying)
+                {
+                    videoPlayer.Stop();
+                    videoDisplay.enabled = false;  // Hide video player
+                }
+        }
+
+    public void OnRefreshButtonClick()
     {
-        Debug.Log("Close button has been clicked");
+        Debug.Log("Refresh clicked: ");
+
+        // For each previously scanned QR code
+        foreach (KeyValuePair<string, ObserverBehaviour> entry in scannedQRCodes)
+        {
+            // Disable the observer behaviour and all its children
+            entry.Value.enabled = true;
+            foreach (Transform child in entry.Value.transform)
+            {
+                child.gameObject.SetActive(true);
+                 Debug.Log("Enabled child game object: " + child.name);
+            }
+        }
+        // Clear the dictionary of scanned QR codes
+        scannedQRCodes.Clear();
+        lastDetectedQRCode = null;
+        score = 0;
+        scoreText.text = "Score: " + score.ToString();
     }
-
-      public void OnRefreshButtonClick()
-    {
-        Debug.Log("Refresh button has been clicked");
-    }
-
-
-
 
 
 }
