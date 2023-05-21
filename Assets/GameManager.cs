@@ -101,20 +101,25 @@ public class GameManager : MonoBehaviour
         videoPlayer.targetMaterialRenderer = videoPlaneRenderer;
 
         GameObject successAudioSourceObject = GameObject.Find("Success Audio Source");
+        Debug.Log("successAudioSourceObject",successAudioSourceObject);
         if (successAudioSourceObject != null)
         {
             successAudioSource = successAudioSourceObject.GetComponent<AudioSource>();
+            Debug.Log("successAudioSourceObject");
         }
 
         GameObject failAudioSourceObject = GameObject.Find("Fail Audio Source");
+        Debug.Log("failAudioSourceObject",failAudioSourceObject);
         if (failAudioSourceObject != null)
         {
             failAudioSource = failAudioSourceObject.GetComponent<AudioSource>();
+            Debug.Log("failAudioSourceObject");
         }
         GameObject randomAudioSourceObject = GameObject.Find("Random Audio Source");
         if (randomAudioSourceObject != null)
         {
             randomAudioSource = randomAudioSourceObject.GetComponent<AudioSource>();
+            Debug.Log("randomAudioSourceObject");
         }
     }
 
@@ -243,6 +248,7 @@ public class GameManager : MonoBehaviour
         lastDetectedQRCode = null;
 
     }
+
 
 
     private bool IsMatchingQRCode(string qrCode1, string qrCode2)

@@ -18,7 +18,8 @@ public class CustomTrackableEventHandler : DefaultObserverEventHandler
         // Get the GameManager component from the object
         gameManager = gameManagerObject.GetComponent<GameManager>();
     }
-
+    // Register for OnTargetStatusChanged event
+    // mObserverBehaviour.OnTargetStatusChanged += OnTargetStatusChanged;
  
 }
 
@@ -36,4 +37,24 @@ public class CustomTrackableEventHandler : DefaultObserverEventHandler
             gameManager.OnQRCodeDetected(mObserverBehaviour.TargetName,mObserverBehaviour);
         }
     }
+
+    //  private void OnTargetStatusChanged(ObserverBehaviour observerBehaviour, TargetStatus targetStatus)
+    // {
+    //     if (targetStatus.Status != Status.TRACKED && targetStatus.Status != Status.EXTENDED_TRACKED)
+    //     {
+    //         // The QR code is no longer tracked, hide the augmentations
+    //         foreach (Transform child in observerBehaviour.transform)
+    //         {
+    //             child.gameObject.SetActive(false);
+    //         }
+    //     }
+    //     else
+    //     {
+    //         // The QR code is tracked again, show the augmentations
+    //         foreach (Transform child in observerBehaviour.transform)
+    //         {
+    //             child.gameObject.SetActive(true);
+    //         }
+    //     }
+    // }
 }
