@@ -1865,7 +1865,9 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 5fd3cadab28fc4f439534dbd544baa4e, type: 3}
     - {fileID: 8300000, guid: 6bed1922f313243189700a4cf170d4e2, type: 3}
     - {fileID: 8300000, guid: 3cc5b4077d2c24542a643852f14a5fd1, type: 3}
-    successVideos: []
+    successVideos:
+    - {fileID: 32900000, guid: 72f86b6f86641408ab99b362798a076d, type: 3}
+    - {fileID: 32900000, guid: 88ae8d587f9864c6e862d6b363099f5b, type: 3}
   - qrCodeType: bear
     successSounds:
     - {fileID: 8300000, guid: 68da1f6c4670d48c28ef8092d696ecdd, type: 3}
@@ -1879,7 +1881,9 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 3f4660cf20a234805812b85e0dec674e, type: 3}
     - {fileID: 8300000, guid: ea02709f699654909abbc9f6096a36f9, type: 3}
     - {fileID: 8300000, guid: f7e36ca2e88ec498eaee15a51458a65e, type: 3}
-    successVideos: []
+    successVideos:
+    - {fileID: 32900000, guid: d8ef32f992474433cbc824811c5bc7b2, type: 3}
+    - {fileID: 32900000, guid: 261f524f710ab46d8ae330013c057b0d, type: 3}
 --- !u!4 &1120257590
 Transform:
   m_ObjectHideFlags: 0
