@@ -7,13 +7,6 @@ using TMPro;
 using Vuforia;
 
 
-// [System.Serializable]
-// public class QRCodeSoundMapping
-// {
-//     public string qrCodeType;
-//     public List<AudioClip> successSounds;
-// }
-
 [System.Serializable]
 public class QRCodeSoundMapping
 {
@@ -42,10 +35,6 @@ public class GameManager : MonoBehaviour
     public RawImage videoDisplay;
     [SerializeField]
     public List<QRCodeSoundMapping> qrCodeSoundMappings = new List<QRCodeSoundMapping>();
-
-
-    // public List<QRCodeSoundMapping> qrCodeSoundMappings;
-    // public List<QRCodeSoundMapping> qrCodeSoundMappings = new List<QRCodeSoundMapping>();
     
     private string lastDetectedQRCode = null;
     private int score = 0;
@@ -129,19 +118,18 @@ public class GameManager : MonoBehaviour
             if (scannedQRCodes.ContainsKey(qrCodeName))
             {
                 observerBehaviour.enabled = false;
-                // Disable the augmentation
+                // If it has, just ignore it and return
                 foreach(Transform child in observerBehaviour.transform)
                 {
                     child.gameObject.SetActive(false);
                 }
-                // If it has, just ignore it and return
                 return;
             }
             // If this QR code is new, remember it and the corresponding ObserverBehaviour object
             scannedQRCodes[qrCodeName] = observerBehaviour;
 
             string qrCodeType = qrCodeName.Split('_')[0];
-            // if the video is playing, stop it
+            // If the video is playing, stop it
             videoPlayer.Stop();
             Debug.Log("OnQRCodeDetected qrCodeType: " + qrCodeType);
 
@@ -151,15 +139,13 @@ public class GameManager : MonoBehaviour
 
             if (soundMapping != null)
             {
-                if (!randomAudioSource.isPlaying) // Add this if statement
+                if (!randomAudioSource.isPlaying)
                 {
                     // Play a random success sound
                     int randomIndex = UnityEngine.Random.Range(0, soundMapping.successSounds.Count);
                     AudioClip randomSound = soundMapping.successSounds[randomIndex];
                     randomAudioSource.clip = randomSound;
                     randomAudioSource.Play();
-                    // successAudioSource.clip = randomSound;
-                    // successAudioSource.Play();
                 }
             }
             else
@@ -203,18 +189,6 @@ public class GameManager : MonoBehaviour
 
                 videoDisplay.enabled = true;  // Show video player
             }
-
-
-            // // Add if else statement to play different videos
-            // // Play the matching video
-            // videoPlayer.clip = bear_qr1_video;
-            // videoPlayer.Prepare();
-
-            // // Set up the callback for when the video is prepared
-            // videoPlayer.prepareCompleted += AssignVideoTexture;
-            // videoPlayer.Play();
-
-            //  videoDisplay.enabled = true;  // Show video player
         }
         else
         {
@@ -256,32 +230,10 @@ public class GameManager : MonoBehaviour
         return qrCode1.Split('_')[0] == qrCode2.Split('_')[0];
     }
 
-    //   public void OnCloseButtonClick()
-    // {
-    //     // Stop the video
-    //     videoPlayer.Stop();
-
-    //     // Hide the video display
-    //     videoDisplay.enabled = false;
-    //     Debug.Log("Close button has been clicked");
-    // }
 
     public void OnCloseButtonClick()
         {
-            // if(scannedQRCodes.ContainsKey(qrCodeName))
-            // {
-            //     // Disable the ObserverBehaviour
-            //     scannedQRCodes[qrCodeName].enabled = false;
-
-            //     // Disable all child GameObjects
-            //     foreach(Transform child in scannedQRCodes[qrCodeName].transform)
-            //     {
-            //         child.gameObject.SetActive(false);
-            //     }
-
               
-            // }
-              // Stop the video player if it's playing
                 if (videoPlayer.isPlaying)
                 {
                     videoPlayer.Stop();
@@ -293,7 +245,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Refresh clicked: ");
 
-        // For each previously scanned QR code
+        // Loop over previously scanned QR code
         foreach (KeyValuePair<string, ObserverBehaviour> entry in scannedQRCodes)
         {
             // Disable the observer behaviour and all its children
@@ -310,6 +262,5 @@ public class GameManager : MonoBehaviour
         score = 0;
         scoreText.text = "Score: " + score.ToString();
     }
-
 
 }
